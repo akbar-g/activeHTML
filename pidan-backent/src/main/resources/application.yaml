@@ -10,7 +10,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/myproject
+    url: jdbc:mysql://localhost:3306/myproject?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=true
     username: root
     password: root
   #session 失效时间
