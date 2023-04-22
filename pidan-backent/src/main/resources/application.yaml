@@ -2,15 +2,19 @@
 server:
   port: 8082
   servlet:
+    # 如果需要访问聊天网站则需要注销掉下面 context-path
     context-path: /api
     session:
       cookie:
         domain: localhost
 
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/myproject?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=true
+    url: jdbc:mysql://localhost:3306/myproject
     username: root
     password: root
   #session 失效时间
@@ -30,6 +34,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 mybatis-plus:
+  apper-locations: classpath:mappers/*/*.xml
   configuration:
     map-underscore-to-camel-case: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

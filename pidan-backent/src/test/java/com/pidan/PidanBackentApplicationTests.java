@@ -1,19 +1,24 @@
 package com.pidan;
 
+import cn.hutool.core.date.DateTime;
 import com.pidan.job.once.InsertUser;
 import com.pidan.model.entity.User;
 import com.pidan.model.request.userrequest.UserRegisterRequest;
 import com.pidan.mapper.UserMapper;
+import com.pidan.service.UserMessageService;
 import com.pidan.service.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PidanBackentApplicationTests {
 
     @Resource
@@ -24,6 +29,9 @@ class PidanBackentApplicationTests {
 
     @Resource
     private UserService userService;
+    @Resource
+    private UserMessageService userMessageService;
+
     @Test
     void contextLoads() {
     }
@@ -69,6 +77,11 @@ class PidanBackentApplicationTests {
 
 
 
+    @Test
+    void deleteMessage(){
+        Boolean aBoolean = userMessageService.DeleteExpireTimeRecords();
+        System.out.println("aBoolean = " + aBoolean);
+    }
 
 //    @Test
 //    void testInsertUser() {
