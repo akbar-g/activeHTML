@@ -9,6 +9,8 @@ import usersinfo from '../components/users/usersInfo.vue';
 import finishusers from '../components/users/finishusers.vue';
 import Histroys from '../components/users/userHistory.vue';
 import friends from '../components/friend/friends.vue';
+import conversation from '../components/conversation/conversation.vue';
+import talk from '../components/conversation/talk.vue';
 
 const routes = [
     {
@@ -67,8 +69,16 @@ const routes = [
                 path:'friend',
                 component:friends,
             },
+            {
+                path:'conversation',
+                component:conversation,
+            },
         ]
-    }
+    },
+    {
+        path:'/talk',
+        component:talk,
+    },
 ]
 
 const c =  createRouter({

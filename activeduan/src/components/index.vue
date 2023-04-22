@@ -11,7 +11,7 @@
     </div>
   <van-tabbar route>
     <van-tabbar-item replace to="/zhuye" icon="home-o">校园</van-tabbar-item>
-    <van-tabbar-item replace to="" icon="search">搜索</van-tabbar-item>
+    <van-tabbar-item replace to="/conversation" icon="chat-o">消息</van-tabbar-item>
     <van-tabbar-item replace to="/friend" icon="friends-o">朋友</van-tabbar-item>
     <van-tabbar-item replace to="/users" icon="setting-o">我的设置</van-tabbar-item>
   </van-tabbar>
