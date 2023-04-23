@@ -17,7 +17,7 @@
       placeholder="请输入消息"
     >
       <template #button>
-        <van-button size="large" type="primary" style="width: 150%;">发送</van-button>
+        <van-button size="large" type="primary" style="width: 150%;" @click="putMessage()">发送</van-button>
       </template>
     </van-field>
 </van-cell-group>
@@ -32,6 +32,25 @@ import { onMounted,ref } from "vue";
 
 let userName = ref(JSON.parse(sessionStorage.getItem('users')).username)
 let toName = ref('')
+let sms = ref('')
+
+//发送消息
+const putMessage = () =>{
+  axios.post('#',{userName,toName,sms}).then(
+        response => {
+        if (response.status==200){
+                console.log(response)
+                var strr = "<div class='put'><span>" + sms + "</span></div></br>"
+                main.append(strr)
+        }else{
+              console.log("请求有点问题",response)
+              }
+        },
+        error => {
+        console.log('提交数据失败，错误是：',error);
+        })
+}
+
 const showChat = (name) => {
         toName = name;
         //现在聊天框
