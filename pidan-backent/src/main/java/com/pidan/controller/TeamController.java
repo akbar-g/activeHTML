@@ -8,8 +8,8 @@ import com.pidan.common.ResultUtils;
 import com.pidan.exception.BusinessException;
 import com.pidan.model.entity.Team;
 import com.pidan.model.entity.User;
-import com.pidan.model.request.teamrequest.TeamAddRequest;
-import com.pidan.model.request.teamrequest.TeamQuery;
+import com.pidan.model.request.teamrequest.*;
+import com.pidan.model.vo.TeamUserVO;
 import com.pidan.service.TeamService;
 import com.pidan.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,75 +40,110 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping("/add")
-    public BaseResponse<Long> addTeam(@RequestBody TeamAddRequest teamAddRequest, HttpServletRequest request){
-        if (teamAddRequest == null){
+    public BaseResponse<Long> addTeam(@RequestBody TeamAddRequest teamAddRequest, HttpServletRequest request) {
+        if (teamAddRequest == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
         Team team = new Team();
-        BeanUtils.copyProperties(teamAddRequest,team);
-        long teamId = teamService.addTeam(team,loginUser);
+        BeanUtils.copyProperties(teamAddRequest, team);
+        long teamId = teamService.addTeam(team, loginUser);
         return ResultUtils.success(teamId);
     }
 
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody long  id){
-        if (id <= 0){
+    public BaseResponse<Boolean> deleteTeam(@RequestBody long id) {
+        if (id <= 0) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         boolean result = teamService.removeById(id);
-        if (!result){
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"删除失败");
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败");
         }
         return ResultUtils.success(true);
     }
 
     @PostMapping("/update")
-    public BaseResponse<Boolean> updateTeam(@RequestBody Team   team){
-        if (team == null){
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+    public BaseResponse<Boolean> updateTeam(@RequestBody TeamUpdateRequest teamUpdateRequest, HttpServletRequest request) {
+        if (teamUpdateRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        boolean save = teamService.updateById(team);
-        if (!save){
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"更新失败");
+        User loginUser = userService.getLoginUser(request);
+
+        boolean save = teamService.updateTeam(teamUpdateRequest, loginUser);
+        if (!save) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败");
         }
         return ResultUtils.success(true);
     }
 
     @GetMapping("/get")
-    public  BaseResponse<Team> getTeamById(long id){
-        if (id <= 0){
+    public BaseResponse<Team> getTeamById(long id) {
+        if (id <= 0) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         Team team = teamService.getById(id);
-        if (team == null){
+        if (team == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         return ResultUtils.success(team);
     }
 
     @GetMapping("/list")
-    public  BaseResponse<List<Team>> listTeams(TeamQuery teamQuery){
-        if (teamQuery == null){
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+    public BaseResponse<List<TeamUserVO>> listTeams(TeamQuery teamQuery, HttpServletRequest request) {
+        if (teamQuery == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        Team team = new Team();
-        BeanUtils.copyProperties(team,teamQuery);
-        QueryWrapper<Team> teamQueryWrapper = new QueryWrapper<>();
-        List<Team> teamList = teamService.list(teamQueryWrapper);
+        boolean isAdmin = userService.isAdmin(request);
+        List<TeamUserVO> teamList = teamService.listTeams(teamQuery, isAdmin);
         return ResultUtils.success(teamList);
     }
 
     @GetMapping("/list/page")
-    public  BaseResponse<Page<Team>> listPageTeams(TeamQuery teamQuery){
-        if (teamQuery == null){
+    public BaseResponse<Page<Team>> listPageTeams(TeamQuery teamQuery) {
+        if (teamQuery == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         Team team = new Team();
-        BeanUtils.copyProperties(team,teamQuery);
+        BeanUtils.copyProperties(team, teamQuery);
         QueryWrapper<Team> teamQueryWrapper = new QueryWrapper<>();
         Page<Team> page = new Page<>(teamQuery.getPageNum(), teamQuery.getPageSize());
         Page<Team> resultPage = teamService.page(page, teamQueryWrapper);
         return ResultUtils.success(resultPage);
     }
+
+    @PostMapping("/join")
+    public BaseResponse<Boolean> joinTeam(@RequestBody TeamJoinRequest teamJoinRequest, HttpServletRequest request) {
+        if (teamJoinRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean res = teamService.joinTeam(teamJoinRequest, loginUser);
+        return ResultUtils.success(res);
+    }
+
+    @PostMapping("/quit")
+    public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitRequest teamQuitRequest, HttpServletRequest request) {
+        if (teamQuitRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean res = teamService.quitTeam(teamQuitRequest, loginUser);
+        return ResultUtils.success(res);
+    }
+
+
+    @PostMapping("/delete")
+    public BaseResponse<Boolean> deleteTeam(@RequestBody long id, HttpServletRequest request) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean res = teamService.deleteTeam(id, loginUser);
+        if (!res){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败");
+        }
+        return ResultUtils.success(true);
+    }
+
 }

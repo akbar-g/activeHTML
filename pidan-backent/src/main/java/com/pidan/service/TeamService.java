@@ -4,6 +4,13 @@ package com.pidan.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pidan.model.entity.Team;
 import com.pidan.model.entity.User;
+import com.pidan.model.request.teamrequest.TeamJoinRequest;
+import com.pidan.model.request.teamrequest.TeamQuery;
+import com.pidan.model.request.teamrequest.TeamQuitRequest;
+import com.pidan.model.request.teamrequest.TeamUpdateRequest;
+import com.pidan.model.vo.TeamUserVO;
+
+import java.util.List;
 
 /**
 * @author 73782
@@ -19,4 +26,44 @@ public interface TeamService extends IService<Team> {
      * @return
      */
     long addTeam(Team team, User loginUser);
+
+    /**
+     * 查询队伍
+     * @param teamQuery
+     * @return
+     */
+    List<TeamUserVO> listTeams(TeamQuery teamQuery,boolean isAdmin);
+
+    /**
+     * 修改队伍
+     * @param teamUpdateRequest
+     * @param loginUser
+     * @return
+     */
+    boolean updateTeam(TeamUpdateRequest teamUpdateRequest,User loginUser);
+
+
+    /**
+     * 加入队伍
+     * @param teamJoinRequest
+     * @param loingUser
+     * @return
+     */
+    boolean joinTeam(TeamJoinRequest teamJoinRequest ,User loingUser);
+
+    /**
+     * 退出队伍
+     * @param teamQuitRequest
+     * @param loginUser
+     * @return
+     */
+    boolean quitTeam(TeamQuitRequest teamQuitRequest, User loginUser);
+
+    /**
+     * 删除队伍
+     * @param id
+     * @param loginUser
+     * @return
+     */
+    boolean deleteTeam(long id, User loginUser);
 }

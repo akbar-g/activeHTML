@@ -16,6 +16,8 @@ public interface UserConstant {
      */
     static final String PREFIX_KEY = "pidan:user:recommend:%s";
 
+    static final String REDISSION_LOCK = "pidan:user:";
+
     /**
      * 用户登录态键
      */
