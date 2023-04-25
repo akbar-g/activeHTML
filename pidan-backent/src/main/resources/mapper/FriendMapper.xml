@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pidan.mapper.FriendMapper">
+
+    <resultMap id="BaseResultMap" type="com.pidan.model.entity.Friend">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="fromUserId" column="fromUserId" jdbcType="BIGINT"/>
+        <result property="toUserId" column="toUserId" jdbcType="BIGINT"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="friendStatus" column="friendStatus" jdbcType="INTEGER"/>
+        <result property="friendBlack" column="friendBlack" jdbcType="INTEGER"/>
+        <result property="accepted" column="accepted" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,fromUserId,toUserId,
+        remark,friendStatus,friendBlack,accepted,
+        createTime,updateTime
+    </sql>
+
+    <select id="isFriend" parameterType="map" resultType="com.pidan.model.entity.Friend">
+        SELECT *
+        FROM friend
+        WHERE (fromUserId = #{fromUserId} AND toUserId = #{toUserId})
+           or (fromUserId = #{toUserId} and toUserId = #{fromUserId})
+    </select>
+
+    <select id="getFriend" parameterType="map" resultType="com.pidan.model.entity.Friend">
+        SELECT *
+        FROM friend
+        WHERE (fromUserId = #{fromUserId} AND toUserId = #{toUserId})
+           or (fromUserId = #{toUserId} and toUserId = #{fromUserId})
+    </select>
+
+    <update id="acceptFriend" parameterType="map">
+        UPDATE friend
+        SET accepted=1
+        WHERE (fromUserId = #{fromUserId} AND toUserId = #{toUserId} AND accepted = 0)
+           or (fromUserId = #{toUserId} AND toUserId = #{fromUserId} AND accepted = 0)
+    </update>
+</mapper>
