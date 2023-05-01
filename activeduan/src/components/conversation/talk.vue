@@ -41,7 +41,7 @@ const putMessage = () =>{
   // let strr = "<img class='imgright' src='https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'><div class='put'><span>" + sms + "</span></div></br></br></br>"
   // m = m + strr
   // main.innerHTML = m
-  axios.post('#',{userName,toName,sms}).then(
+  axios.get(`'http://localhost:8082/api/userMessage/getMessage/?${userName}&${toName}'`).then(
         response => {
         if (response.status==200){
                 console.log(response)
@@ -100,7 +100,7 @@ const showChat = (name) => {
 const onClickLeft = () => history.back();
 
 onMounted(() => {
-  toName = localStorage.getItem("toname")
+  toName = sessionStorage.getItem("toname")
   showChat(toName)
 })
 </script>

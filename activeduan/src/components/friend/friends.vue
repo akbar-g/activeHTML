@@ -1,6 +1,6 @@
 <template>
     <van-nav-bar title="我的朋友们"/>
-<van-index-bar :index-list="indexList">
+<van-index-bar>
   <van-index-anchor index="A" />
   <van-swipe-cell style="margin-bottom: .625rem;margin-left: .625rem;" v-for="i in frinds" :key="i">
     <van-image
@@ -9,7 +9,7 @@
     height="2.5rem"
     fit="cover"
     position="center"
-    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
+    src="../../../public/kk.jpg"
     style="vertical-align: middle;"
     />
     <h4 style="display:inline-block;width: 80%;padding-right: 60%;color: black;margin-left: .625rem;">{{ i }}</h4>
@@ -26,31 +26,31 @@
 <script setup>
 import axios from 'axios'
 import cnchar from 'cnchar'
-import { ref,onMounted } from 'vue'
+import { ref,onBeforeMount } from 'vue'
 
-const friends = ref([1,2,3,4,5,6,7,8])
+const frinds = ref([1,2,3,4])
 
-// const friendsLife = (value) => {
-//     console.log(value);
-//       axios.get('#').then(
-//     response => {
-//       if (response.status==200){
-//               console.log(response);
-//               alert('修改成功！')
-//               friends = response.data
-//               router.push( '/users' )
-//             }else{
-//               alert("请求报错")
-//             }
-//           },
-//           error => {
-//             console.log('提交数据失败，错误是：',error);
-//           }
-//         ),
-//   error => {
-//     console.log('提交失败，错误是：',error);
-//   }
-// }
+const friendsLife = () => {
+      axios.get('http://localhost:8082/api/friend/friendlist').then(
+    response => {
+      if (response.status==200){
+              console.log(response)
+              frinds = response.data
+              alert('修改成功！')
+            }else{
+              alert("请求报错")
+            }
+          },
+          error => {
+            console.log('提交数据失败，错误是：',error);
+          }
+        )
+  }
+
+  onBeforeMount(() => {
+    console.log(1)
+    friendsLife()
+  })
 // const friendsDel = (value) => {
 //     console.log(value);
 //       axios.get('').then(
@@ -73,12 +73,6 @@ const friends = ref([1,2,3,4,5,6,7,8])
 //     console.log('提交失败，错误是：',error);
 //   }
 // }
-// onMounted(() => {
-//   axios.get('').then(
-//     response => {
-//
-//     }
-//   ),
 //   error => {
 //     console.log('提交失败，错误是：',error);
 //   }

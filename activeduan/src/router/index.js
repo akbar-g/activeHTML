@@ -68,10 +68,38 @@ const routes = [
             {
                 path:'friend',
                 component:friends,
+                meta:{isUser:true},
+                beforeEnter: (to, from, next) => {
+                    if (to.meta.isUser) {
+                        if (sessionStorage.getItem('login')==="ok") {
+                            next()
+                        } else {
+                            if (confirm('去登录吗？')) {
+                                next('/login')
+                            }
+                        }
+                    }else{
+                        next()
+                    }
+                },
             },
             {
                 path:'conversation',
                 component:conversation,
+                meta:{isUser:true},
+                beforeEnter: (to, from, next) => {
+                    if (to.meta.isUser) {
+                        if (sessionStorage.getItem('login')==="ok") {
+                            next()
+                        } else {
+                            if (confirm('去登录吗？')) {
+                                next('/login')
+                            }
+                        }
+                    }else{
+                        next()
+                    }
+                },
             },
         ]
     },

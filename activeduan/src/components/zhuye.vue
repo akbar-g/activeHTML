@@ -49,7 +49,7 @@
   >
   <div v-masonry  transition-duration="0.3s" i tem-selector=".item">
     <div v-masonry-tile class="item" v-for="item in list" :key="item">
-      <img :src="`../../public/images/item-${item}.jpg`">
+      <img src="../../public/kk.jpg">
       <div>
         <span>
           123456789
@@ -83,7 +83,7 @@ export default {
     const refreshing = ref(false);
     const IMtext = ref('');
     let showsearchs = ref(false);
-
+//懒加载帖子
     const onLoad = () => {
       setTimeout(() => {
         if (refreshing.value) {
@@ -101,7 +101,6 @@ export default {
         }
       }, 1000);
     };
-
     const onRefresh = () => {
       // 清空列表数据
       finished.value = false;
@@ -150,6 +149,15 @@ export default {
     onMounted(() => {
       // 调用cookie查询方法
       console.log("cookie是否存在");
+      //查询用户是否登录(获取当前登录用户)
+      axios.get("http://localhost:8082/api/user/get/login").then(response => {
+        console.log(response);
+      },
+      error => {
+        console.log('请求错误',error);
+      })
+      //获取帖子
+      
     })
     
     return {

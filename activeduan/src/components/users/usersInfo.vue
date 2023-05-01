@@ -5,7 +5,7 @@
   height="10rem"
   fit="cover"
   position="center"
-  src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
+  src="../../../public/kk.jpg"
   style="display: block; margin: 1.875rem auto;"
 />
 <van-divider style="font-size: 1.25rem; font-weight: 600;">{{ userName }}</van-divider>
@@ -38,6 +38,7 @@ export default {
     const showCenter = ref(false);
     let userName = JSON.parse(sessionStorage.getItem('users')).username
     const router = useRouter()
+    //注销
     const onDel = () => {
       axios.post('http://localhost:8082/api/user/delete',String( JSON.parse(sessionStorage.getItem('users')).userid )).then(
           response =>{
@@ -54,14 +55,18 @@ export default {
           }
         )
     }
+    //弹出框显示和隐藏
     const showPopup = () => {
       showCenter.value = true;
     };
+    //登录退出
     const exituser = () => {
       axios.get('http://localhost:8082/api/user/logout').then(
           response =>{
             if (response.status==200){
               console.log(response);
+              sessionStorage.setItem('login','');
+              sessionStorage.setItem('users','');
               alert('退出成功!')
               router.push( '/zhuye' )
             }else{
